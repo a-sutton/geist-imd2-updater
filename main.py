@@ -1,7 +1,11 @@
 import http.client
 import requests
 import json
+import os
+from py_dotenv import read_dotenv
 
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+read_dotenv(dotenv_path)
 # IP address text file path\to\file
 txt_file = r"C:\Users\asutton\Downloads\geist_imd_ip.txt"
 file = open(txt_file, "r")
@@ -9,11 +13,11 @@ for line in file.readlines():
     ip = line.strip()
     try:
         # url for existing 'facilities' user to log in and get info
-        url = f'http://{ip}/api/auth/facilities'
+        url = f'http://{ip}/api/auth/{os.getenv("ORIGINAL_USER")}'
         # json for POST request
         login_json = json.dumps({"cmd": "login",
                                  "data": {
-                                     "password": "facpub"
+                                     "password": os.getenv("ORIGINAL_PASS")
                                  }
                                  })
         # POST request to log in
@@ -35,8 +39,8 @@ for line in file.readlines():
                 "token": f"{token}",
                 "cmd": "add",
                 "data": {
-                    "username": "techopsadmn",
-                    "password": "$iemens5Techops1",
+                    "username": os.getenv('PDU_USER'),
+                    "password": os.getenv('PDU_PASS'),
                     "enabled": True,
                     "admin": True
                 }})
@@ -49,11 +53,11 @@ for line in file.readlines():
                 "token": f"{token}",
                 "cmd": "set",
                 "data": {
-                    "username": "techopsadmn",
+                    "username": os.getenv('V3_USER'),
                     "authType": "md5",
-                    "authPassword": "$iemens5Techops1",
+                    "authPassword": os.getenv('V3_AUTH_PASS'),
                     "privType": "aes",
-                    "privPassword": "$iemens5Secur320"
+                    "privPassword": os.getenv('V3_PRIV_PASS')
                 }
             })
             # POST request to modify 'read' snmpv3 user
