@@ -7,7 +7,7 @@ from py_dotenv import read_dotenv
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 read_dotenv(dotenv_path)
 # IP address text file path\to\file
-txt_file = r"C:\Users\asutton\Downloads\geist_imd_ip.txt"
+txt_file = os.getenv('PATH_TO_TXT')
 file = open(txt_file, "r")
 for line in file.readlines():
     ip = line.strip()
